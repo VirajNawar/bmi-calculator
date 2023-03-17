@@ -5,34 +5,39 @@ const BmiCalculator = () => {
     const [gender, setGender] = useState('Male');
     const [height, setHeight] = useState(60);
     const [weight, setWeight] = useState(50);
+    const [BMI, setBMI] = useState(0.0);
+  const [BMICategory, setBMICategory] = useState('');
     
-    const calculateBMI = () => {
-        //conversion factor for inches to meters
-      const heightInMeters = height / 39.37;
-      const bmi = weight / (heightInMeters * heightInMeters);
-  
-      if (gender === 'Male') {
-        if (bmi < 18.5) {
-          return 'Underweight';
-        } else if (bmi >= 18.5 && bmi <= 24.9) {
-          return 'Normal weight';
-        } else if (bmi >= 25 && bmi <= 29.9) {
-          return 'Overweight';
-        } else {
-          return 'Obesity';
-        }
+   
+  const calculateBMI = () => {
+    const heightInMeters = height / 39.37;
+    const calculatedBMI = weight / (heightInMeters * heightInMeters);
+    setBMI(calculatedBMI);
+
+    if(gender === 'Male'){
+
+      if (calculatedBMI < 18.5) {
+        setBMICategory('Underweight');
+      } else if (calculatedBMI >= 18.5 && calculatedBMI < 25) {
+        setBMICategory('Normal weight');
+      } else if (calculatedBMI >= 25 && calculatedBMI < 30) {
+        setBMICategory('Overweight');
       } else {
-        if (bmi < 20.5) {
-          return 'Underweight';
-        } else if (bmi >= 20.5 && bmi <= 26.9) {
-          return 'Normal weight';
-        } else if (bmi >= 27 && bmi <= 31.9) {
-          return 'Overweight';
-        } else {
-          return 'Obesity';
-        }
+        setBMICategory('Obese');
       }
-    };
+    }
+    else {
+      if (calculatedBMI < 20.5) {
+        setBMICategory('Underweight');
+      } else if (calculatedBMI < 27) {
+        setBMICategory('Normal weight');
+      } else if (calculatedBMI < 32) {
+        setBMICategory('Overweight');
+      } else {
+        setBMICategory('Obese');
+      }
+    }
+  };
 
     return(
         <div className='flex justify-center items-center mt-4 flex-col'>
@@ -96,22 +101,14 @@ const BmiCalculator = () => {
             step="0.01"
             />
             </div>
-            <div className="mb-4">
-              <label htmlFor="bmi" className="mr-2 font-medium">
-                BMI:
-              </label>
-              <span id="bmi" className="border rounded-lg px-2 py-1 w-20">
-                {((weight / (height * height)) * 703).toFixed(2)}
-              </span>
-            </div>
-            <div>
-              <label htmlFor="bmiCategory" className="mr-2 font-medium">
-                BMI Category:
-              </label>
-              <span id="bmiCategory" className="border rounded-lg px-2 py-1">
-                {calculateBMI()}
-              </span>
-            </div>
+            <button onClick={calculateBMI}  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded mb-3">Calculate BMI</button>
+  <br />
+  {BMI > 0 && (
+    <div>
+      <p>Your BMI is: {BMI.toFixed(2)}</p>
+      <p>Your BMI category is: {BMICategory}</p>
+    </div>
+  )}
           </div>
         </div>
         
